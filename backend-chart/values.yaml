@@ -1,0 +1,26 @@
+imageRepository: kvadym/go-to-do-app-server
+imageTag: master-a3a396a7
+
+containerPort: 8081
+containerPortName: backend
+
+dbUri: mongodb://mongodb-service:27017
+dbName: todo
+dbCollectionName: todos
+
+requestsCpu: 200m
+requestsMemory: 256Mi
+limitsCpu: 500m
+limitsMemory: 512Mi
+
+serviceType: ClusterIP
+servicePortName: backend
+servicePort: 8081
+
+autoscalingEnabled: true
+autoscalingMinReplicas: 3
+autoscalingMaxReplicas: 5
+autoscalingTargetCPUUtilizationPercentage: 70
+autoscalingTargetMemoryUtilizationPercentage: 70
+
+podDisruptionBudgetMinAvailable: 1

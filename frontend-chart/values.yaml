@@ -1,0 +1,22 @@
+imageRepository: kvadym/go-to-do-app-client
+imageTag: master-a3a396a7
+
+containerPort: 80
+containerPortName: frontend
+
+requestsCpu: 100m
+requestsMemory: 128Mi
+limitsCpu: 200m
+limitsMemory: 256Mi
+
+serviceType: NodePort
+servicePortName: frontend
+servicePort: 80
+
+autoscalingEnabled: true
+autoscalingMinReplicas: 3
+autoscalingMaxReplicas: 5
+autoscalingTargetCPUUtilizationPercentage: 70
+autoscalingTargetMemoryUtilizationPercentage: 70
+
+podDisruptionBudgetMinAvailable: 1

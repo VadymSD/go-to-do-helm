@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "frontend-chart.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+spec:
+  selector:
+    matchLabels:
+      {{ include "frontend-chart.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{ include "frontend-chart.selectorLabels" . | nindent 8 }}
+    spec:
+      affinity:
+          podAntiAffinity:
+            preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                  - key: app.kubernetes.io/name
+                    operator: In
+                    values:
+                    - {{ include "frontend-chart.name" . }}
+                topologyKey: kubernetes.io/hostname
+      containers:
+        - name: {{ include "frontend-chart.name" . }}
+          image: "{{ .Values.imageRepository }}:{{ .Values.imageTag }}"
+          ports:
+            - containerPort: {{ .Values.containerPort }}
+              name: {{ .Values.containerPortName }}
+          readinessProbe:
+            tcpSocket:
+              port: {{ .Values.containerPort }}
+            initialDelaySeconds: 15
+            periodSeconds: 10
+          livenessProbe:
+            tcpSocket:
+              port: {{ .Values.containerPort }}
+            initialDelaySeconds: 15
+            periodSeconds: 10
+          resources:
+            requests:
+              cpu: {{ .Values.requestsCpu }}
+              memory: {{ .Values.requestsMemory }}
+            limits:
+              cpu: {{ .Values.limitsCpu }}
+              memory: {{ .Values.limitsMemory }}

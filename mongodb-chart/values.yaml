@@ -1,0 +1,30 @@
+statefulSetName: mongodb
+replicasCount: 3
+dbimage: mongo:latest
+
+readinessProbeInitialDelay: 15
+readinessProbePeriod: 10
+
+containerName: mongodb
+containerPort: 27017
+
+requestsCpu: "200m"
+requestsMemory: "256Mi"
+limitsCpu: "500m"
+limitsMemory: "512Mi"
+
+serviceName: mongodb-service
+serviceType: ClusterIP
+servicePortName: mongodb
+servicePort: 27017
+
+pvcName: mongodb-pvc
+pvcAccessMode: ReadWriteOnce
+pvcSize: 1Gi
+
+cronJobName: mongodb-backup
+dbUri: mongodb://mongodb-service:27017/todo
+
+backUpPvcName: mongodb-pvc
+backUpPvcAccessMode: ReadWriteOnce
+backUpPvcSize: 2Gi

@@ -1,0 +1,29 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: "{{ include "backend-chart.fullname" . }}-init-tasks"
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    "helm.sh/hook": post-install
+spec:
+  template:
+    spec:
+      containers:
+        - name: curl
+          image: curlimages/curl:8.11.1
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              curl -X POST -H "Content-Type: application/json" \
+                -d '{"task": "Learn how to use the To-Do app"}' \
+                http://backend-backend-chart:8081/api/task
+              curl -X POST -H "Content-Type: application/json" \
+                -d '{"task": "Add your first task. Enter task and press Enter"}' \
+                http://backend-backend-chart:8081/api/task
+              curl -X POST -H "Content-Type: application/json" \
+                -d '{"task": "Complete your first task by pressing 'Done'"}' \
+                http://backend-backend-chart:8081/api/task
+              curl -X POST -H "Content-Type: application/json" \
+                -d '{"task": "Press 'Delete' cross to delete a task"}' \
+                http://backend-backend-chart:8081/api/task
+      restartPolicy: Never

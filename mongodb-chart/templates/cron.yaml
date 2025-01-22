@@ -1,0 +1,29 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ .Values.cronJobName }}
+  namespace: {{ .Release.Namespace }}
+spec:
+  schedule: "* 1 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: mongo-backup
+              image: mongo
+              command: ["/bin/sh", "-c"]
+              args:
+                - >
+                  mkdir -p /backup/mongodb &&
+                  mongodump --uri={{ quote .Values.dbUri }}
+                  --archive=/backup/mongodb/$(date +%Y-%m-%d).gz
+                  --gzip
+              volumeMounts:
+                    - name: backup-volume
+                      mountPath: /backup
+          volumes:
+            - name: backup-volume
+              persistentVolumeClaim:
+                claimName: {{ .Values.backUpPvcName }}
+          restartPolicy: OnFailure
