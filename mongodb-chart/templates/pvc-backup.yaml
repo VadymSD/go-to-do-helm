@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ .Values.backUpPvcName }}
+  namespace: {{ .Release.Namespace }}
+spec:
+  accessModes:
+    - {{ .Values.backUpPvcAccessMode }}
+  resources:
+    requests:
+      storage: {{ .Values.backUpPvcSize }}

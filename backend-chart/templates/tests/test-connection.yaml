@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "backend-chart.fullname" . }}-test-connection"
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    "helm.sh/hook": test
+spec:
+  containers:
+    - name: wget
+      image: busybox
+      command: ['wget']
+      args: ['{{ include "backend-chart.fullname" . }}:{{ .Values.servicePort }}']
+  restartPolicy: Never

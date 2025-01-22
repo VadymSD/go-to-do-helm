@@ -1,0 +1,10 @@
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ include "frontend-chart.fullname" . }}-pdb
+  namespace: {{ .Release.Namespace }}
+spec:
+  minAvailable: {{ .Values.podDisruptionBudgetMinAvailable }}
+  selector:
+    matchLabels:
+      {{ include "frontend-chart.selectorLabels" . | nindent 6 }}
