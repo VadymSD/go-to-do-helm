@@ -1,0 +1,25 @@
+# Ignore Helm release configurations
+*.tgz
+*.lock
+
+# Ignore rendered templates
+charts/
+templates/*.yaml
+templates/*.tpl
+
+# Ignore Helm configuration and build artifacts
+.helm/
+
+# Ignore Kubernetes resource YAMLs
+*.yaml
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.bak
+~*
+
+# Ignore Helm debug files
+output/
